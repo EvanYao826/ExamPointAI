@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Docker
+mysql_data/
+minio_data/
+
+# Node / Mini Program
+node_modules/
+miniapp/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Upload files
+uploads/

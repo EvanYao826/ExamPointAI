@@ -1,0 +1,130 @@
+.index-page {
+  min-height: 100vh;
+  background: #F5F5F5;
+}
+
+/* 顶部 */
+.header {
+  background: #4A90D9;
+  padding: 20rpx 30rpx;
+}
+
+.current-subject {
+  color: #fff;
+  font-size: 28rpx;
+}
+
+/* 功能入口 */
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  padding: 30rpx;
+}
+
+.entry-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.entry-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.entry-label {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 排行榜 */
+.ranking-section {
+  margin: 0 30rpx 30rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.ranking-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.ranking-tabs {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tab {
+  font-size: 26rpx;
+  color: #999;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.tab.active {
+  color: #4A90D9;
+  background: rgba(74, 144, 217, 0.1);
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.rank-badge {
+  width: 60rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.rank-name {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  margin-left: 16rpx;
+}
+
+.rank-count {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.ranking-divider {
+  height: 2rpx;
+  background: #eee;
+  margin: 8rpx 0;
+}
+
+.my-rank {
+  background: rgba(74, 144, 217, 0.05);
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin: 0 -16rpx;
+}
+
+/* 底部占位 */
+.tabbar-placeholder {
+  height: 120rpx;
+}

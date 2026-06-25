@@ -1,0 +1,57 @@
+<view class="index-page">
+  <!-- 顶部：科目选择 -->
+  <view class="header">
+    <text class="current-subject">当前科目：{{currentSubject || '请选择'}} ▼</text>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="entry-grid">
+    <view class="entry-item" bindtap="goToBank">
+      <text class="entry-icon">📚</text>
+      <text class="entry-label">公共题库</text>
+    </view>
+    <view class="entry-item">
+      <text class="entry-icon">📖</text>
+      <text class="entry-label">我的题库</text>
+    </view>
+    <view class="entry-item">
+      <text class="entry-icon">❌</text>
+      <text class="entry-label">错题本</text>
+    </view>
+    <view class="entry-item">
+      <text class="entry-icon">➕</text>
+      <text class="entry-label">添加题库</text>
+    </view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="ranking-section">
+    <view class="ranking-header">
+      <text class="ranking-title">排行榜</text>
+      <view class="ranking-tabs">
+        <text class="tab {{rankingTab === 'daily' ? 'active' : ''}}" bindtap="switchTab" data-tab="daily">今日</text>
+        <text class="tab {{rankingTab === 'weekly' ? 'active' : ''}}" bindtap="switchTab" data-tab="weekly">本周</text>
+      </view>
+    </view>
+
+    <view class="ranking-list">
+      <view class="ranking-item" wx:for="{{rankingList}}" wx:key="rank">
+        <text class="rank-badge">{{item.rank <= 3 ? medals[item.rank - 1] : item.rank}}</text>
+        <text class="rank-name">{{item.nickname}}</text>
+        <text class="rank-count">{{item.count}}题</text>
+      </view>
+
+      <view class="ranking-divider"></view>
+
+      <!-- 我的排名 -->
+      <view class="ranking-item my-rank">
+        <text class="rank-badge">📍</text>
+        <text class="rank-name">我</text>
+        <text class="rank-count">{{myCount}}题 (第{{myRank}}名)</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部 TabBar 占位 -->
+  <view class="tabbar-placeholder"></view>
+</view>
