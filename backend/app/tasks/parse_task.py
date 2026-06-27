@@ -6,7 +6,7 @@ from app.core.database import SessionLocal
 from app.models.upload import UploadTask
 from app.models.bank import QuestionBank
 from app.models.question import Question, QuestionOption
-from app.services.parser import parse_docx
+from app.services.parser import parse_docx, parse_pdf
 
 
 def _parse_and_save(task_id: int, filepath: str, bank_id: int) -> dict:
@@ -35,8 +35,10 @@ def _parse_and_save(task_id: int, filepath: str, bank_id: int) -> dict:
         # 解析文件
         if filepath.endswith('.docx'):
             questions_data = parse_docx(filepath)
+        elif filepath.endswith('.pdf'):
+            questions_data = parse_pdf(filepath)
         else:
-            raise ValueError("仅支持 .docx 格式")
+            raise ValueError("仅支持 .docx 和 .pdf 格式")
 
         # 入库
         success_count = 0

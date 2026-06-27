@@ -1,10 +1,35 @@
 """
-Word 文档解析引擎
-支持 .docx 格式，提取题目、选项、答案、解析
+文档解析引擎
+支持 .docx 和 .pdf 格式，提取题目、选项、答案、解析
 """
 
 import re
 from docx import Document
+
+
+def parse_pdf(filepath: str) -> list[dict]:
+    """
+    解析 .pdf 文件，返回题目列表
+
+    仅支持文字版 PDF，不支持扫描件
+    """
+    import pdfplumber
+
+    lines = []
+    with pdfplumber.open(filepath) as pdf:
+        for page in pdf.pages:
+            text = page.extract_text()
+            if text:
+                # 按行分割，清理空白
+                for line in text.split('\n'):
+                    line = line.strip()
+                    if line:
+                        lines.append(line)
+
+    if not lines:
+        return []
+
+    return _parse_questions(lines)
 
 
 def parse_docx(filepath: str) -> list[dict]:

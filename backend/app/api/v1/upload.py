@@ -67,7 +67,7 @@ async def upload_file(
     db.refresh(task)
 
     # 触发解析任务
-    if ext == '.docx':
+    if ext in ('.docx', '.pdf'):
         if settings.USE_CELERY:
             # 生产环境：Celery 异步
             from app.tasks.parse_task import parse_bank_file
@@ -84,7 +84,7 @@ async def upload_file(
 
     return {
         "code": 0,
-        "msg": "上传成功" + ("，正在解析中" if ext == ".docx" else "（仅支持 .docx 解析）"),
+        "msg": "上传成功，正在解析中",
         "data": {
             "task_id": task.id,
             "bank_id": bank.id,
