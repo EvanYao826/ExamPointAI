@@ -1,13 +1,27 @@
 {
   "pages": [
-    "pages/login/login",
-    "pages/index/index"
+    "pages/splash/splash",
+    "pages/index/index",
+    "pages/mine/mine"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "考点通",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#F5F5F5"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f8fa"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "刷题"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

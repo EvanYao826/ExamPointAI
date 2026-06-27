@@ -1,4 +1,4 @@
-const app = getApp()
+var app = getApp()
 
 /**
  * 封装 wx.request
@@ -7,37 +7,38 @@ const app = getApp()
  * @param {object} data - 请求数据
  * @returns {Promise}
  */
-function request(url, method = 'GET', data = {}) {
-  return new Promise((resolve, reject) => {
-    const header = {
+function request(url, method, data) {
+  method = method || 'GET'
+  data = data || {}
+
+  return new Promise(function (resolve, reject) {
+    var header = {
       'Content-Type': 'application/json',
     }
 
-    // 添加 token
     if (app.globalData.token) {
-      header['Authorization'] = `Bearer ${app.globalData.token}`
+      header['Authorization'] = 'Bearer ' + app.globalData.token
     }
 
     wx.request({
-      url: `${app.globalData.baseUrl}${url}`,
-      method,
-      data,
-      header,
-      success(res) {
+      url: app.globalData.baseUrl + url,
+      method: method,
+      data: data,
+      header: header,
+      success: function (res) {
         if (res.statusCode === 200) {
           resolve(res.data)
         } else if (res.statusCode === 401) {
-          // token 过期，跳转登录页
+          // 未登录，清除 token
           app.clearAuth()
-          wx.redirectTo({ url: '/pages/login/login' })
-          reject(new Error('登录已过期'))
+          reject(new Error('未登录'))
         } else {
-          const msg = res.data?.detail || '请求失败'
+          var msg = (res.data && res.data.detail) || '请求失败'
           wx.showToast({ title: msg, icon: 'none' })
           reject(new Error(msg))
         }
       },
-      fail(err) {
+      fail: function (err) {
         wx.showToast({ title: '网络错误', icon: 'none' })
         reject(err)
       },
@@ -45,4 +46,4 @@ function request(url, method = 'GET', data = {}) {
   })
 }
 
-module.exports = { request }
+module.exports = { request: request }

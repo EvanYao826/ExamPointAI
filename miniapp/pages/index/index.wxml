@@ -6,19 +6,19 @@
 
   <!-- 功能入口 -->
   <view class="entry-grid">
-    <view class="entry-item" bindtap="goToBank">
+    <view class="entry-item" bindtap="goToPublicBank">
       <text class="entry-icon">📚</text>
       <text class="entry-label">公共题库</text>
     </view>
-    <view class="entry-item">
+    <view class="entry-item" bindtap="goToMyBank">
       <text class="entry-icon">📖</text>
       <text class="entry-label">我的题库</text>
     </view>
-    <view class="entry-item">
+    <view class="entry-item" bindtap="goToWrong">
       <text class="entry-icon">❌</text>
       <text class="entry-label">错题本</text>
     </view>
-    <view class="entry-item">
+    <view class="entry-item" bindtap="goToUpload">
       <text class="entry-icon">➕</text>
       <text class="entry-label">添加题库</text>
     </view>
@@ -41,10 +41,10 @@
         <text class="rank-count">{{item.count}}题</text>
       </view>
 
-      <view class="ranking-divider"></view>
+      <view wx:if="{{rankingList.length > 0}}" class="ranking-divider"></view>
 
       <!-- 我的排名 -->
-      <view class="ranking-item my-rank">
+      <view class="ranking-item my-rank" wx:if="{{myCount > 0}}">
         <text class="rank-badge">📍</text>
         <text class="rank-name">我</text>
         <text class="rank-count">{{myCount}}题 (第{{myRank}}名)</text>

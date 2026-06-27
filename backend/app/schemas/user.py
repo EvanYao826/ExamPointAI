@@ -8,11 +8,11 @@ class UpdateProfileRequest(BaseModel):
 
 class UserInfoResponse(BaseModel):
     id: int
-    phone: str
+    phone: str | None = None
     nickname: str
     avatar: str
-    school_id: int | None
-    major_id: int | None
+    school_id: int | None = None
+    major_id: int | None = None
 
     class Config:
         from_attributes = True

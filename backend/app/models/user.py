@@ -8,7 +8,8 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
-    phone = Column(String(20), unique=True, nullable=False, comment="手机号")
+    phone = Column(String(20), unique=True, nullable=True, comment="手机号")
+    openid = Column(String(100), unique=True, nullable=True, comment="微信openid")
     nickname = Column(String(50), default="", comment="昵称")
     avatar = Column(String(255), default="", comment="头像地址")
     school_id = Column(BigInteger, nullable=True, comment="学校ID")

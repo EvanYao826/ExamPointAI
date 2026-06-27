@@ -1,0 +1,16 @@
+<view class="tabbar">
+  <view
+    class="tabbar-item {{selected === index ? 'active' : ''}}"
+    wx:for="{{tabs}}"
+    wx:key="path"
+    bindtap="switchTab"
+    data-path="{{item.path}}"
+    data-index="{{index}}"
+  >
+    <image
+      class="tabbar-icon"
+      src="{{selected === index ? item.icon.active : item.icon.normal}}"
+    ></image>
+    <text class="tabbar-text">{{item.text}}</text>
+  </view>
+</view>

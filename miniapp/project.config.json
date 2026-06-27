@@ -33,8 +33,12 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "3.3.4",
-  "appid": "wx0000000000000000",
+  "libVersion": "3.16.1",
+  "appid": "wx56063c50605f31d7",
   "projectname": "exam-point-mini",
-  "condition": {}
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
 }

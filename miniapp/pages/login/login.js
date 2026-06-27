@@ -19,7 +19,8 @@ Page({
 
   // 发送验证码
   onSendCode() {
-    const { phone } = this.data
+    const { phone, countdown } = this.data
+    if (countdown > 0) return
     if (phone.length !== 11) {
       wx.showToast({ title: '请输入正确的手机号', icon: 'none' })
       return
@@ -36,10 +37,10 @@ Page({
   // 倒计时
   startCountdown() {
     this.setData({ countdown: 60 })
-    const timer = setInterval(() => {
+    this._timer = setInterval(() => {
       const { countdown } = this.data
       if (countdown <= 1) {
-        clearInterval(timer)
+        clearInterval(this._timer)
         this.setData({ countdown: 0 })
       } else {
         this.setData({ countdown: countdown - 1 })
@@ -47,7 +48,7 @@ Page({
     }, 1000)
   },
 
-  // 登录
+  // 手机号+验证码登录
   onLogin() {
     const { phone, code } = this.data
     if (phone.length !== 11 || code.length !== 6) {
@@ -55,17 +56,14 @@ Page({
       return
     }
 
-    wx.showLoading({ title: '登录中...' })
+    wx.showLoading({ title: '登录中...', mask: true })
 
     request('/api/v1/auth/sms/login', 'POST', { phone, code })
       .then((res) => {
         const app = getApp()
         app.setToken(res.access_token)
-
         wx.hideLoading()
         wx.showToast({ title: '登录成功', icon: 'success' })
-
-        // 跳转首页
         setTimeout(() => {
           wx.switchTab({ url: '/pages/index/index' })
         }, 1000)
@@ -73,5 +71,14 @@ Page({
       .catch(() => {
         wx.hideLoading()
       })
+  },
+
+  // 微信快捷登录（开发阶段暂不实现）
+  onWxLogin() {
+    wx.showToast({ title: '微信登录开发中', icon: 'none' })
+  },
+
+  onUnload() {
+    if (this._timer) clearInterval(this._timer)
   },
 })

@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     # SMS
     SMS_MOCK: bool = True  # 开发阶段使用固定验证码
 
+    # 微信小程序
+    WX_APPID: str = "wx56063c50605f31d7"
+    WX_SECRET: str = "8f9b16090da06ebf77841ea364f84ac4"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

@@ -1,0 +1,8 @@
+<!-- 启动页 -->
+<view class="splash-page">
+  <view class="logo-wrap">
+    <view class="loading-ring"></view>
+    <image class="logo" src="/assets/icons/logo.png" mode="aspectFit"></image>
+  </view>
+  <text class="app-name">考点通</text>
+</view>

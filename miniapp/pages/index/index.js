@@ -1,37 +1,52 @@
+var withLogin = require('../../utils/auth').withLogin
+
 Page({
   data: {
     currentSubject: '操作系统',
     rankingTab: 'daily',
     medals: ['🥇', '🥈', '🥉'],
-    rankingList: [
-      { rank: 1, nickname: '张三', count: 128 },
-      { rank: 2, nickname: '李四', count: 117 },
-      { rank: 3, nickname: '王五', count: 106 },
-    ],
-    myRank: 8,
-    myCount: 52,
+    rankingList: [],
+    myRank: 0,
+    myCount: 0,
   },
 
-  onLoad() {
-    // 检查登录状态
-    const app = getApp()
-    if (!app.globalData.token) {
-      wx.redirectTo({ url: '/pages/login/login' })
-      return
+  onShow: function () {
+    // 设置 tabBar 选中态
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
     }
-    // TODO: 加载真实数据
   },
 
   // 切换排行榜 Tab
-  switchTab(e) {
-    const tab = e.currentTarget.dataset.tab
-    this.setData({ rankingTab: tab })
-    // TODO: 加载对应排行榜数据
+  switchTab: function (e) {
+    this.setData({ rankingTab: e.currentTarget.dataset.tab })
   },
 
-  // 进入公共题库
-  goToBank() {
-    // TODO: 跳转题库列表页
-    wx.showToast({ title: '题库列表开发中', icon: 'none' })
+  // 公共题库（需登录）
+  goToPublicBank: function () {
+    withLogin(function () {
+      wx.showToast({ title: '公共题库开发中', icon: 'none' })
+    })
+  },
+
+  // 我的题库（需登录）
+  goToMyBank: function () {
+    withLogin(function () {
+      wx.showToast({ title: '我的题库开发中', icon: 'none' })
+    })
+  },
+
+  // 错题本（需登录）
+  goToWrong: function () {
+    withLogin(function () {
+      wx.showToast({ title: '错题本开发中', icon: 'none' })
+    })
+  },
+
+  // 上传题库（需登录）
+  goToUpload: function () {
+    withLogin(function () {
+      wx.showToast({ title: '上传题库开发中', icon: 'none' })
+    })
   },
 })
