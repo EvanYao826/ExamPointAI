@@ -13,3 +13,8 @@ class BankItem(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BankDetailResponse(BankItem):
+    creator_id: int
+    source_file: str

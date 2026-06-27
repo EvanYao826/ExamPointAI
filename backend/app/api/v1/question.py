@@ -4,7 +4,11 @@ from sqlalchemy.orm import Session
 from app.api.v1.deps import get_db, get_current_user
 from app.models.user import User
 from app.models.question import Question, QuestionOption, UserAnswerRecord
-from app.schemas.question import QuestionResponse, OptionItem, SubmitRequest, SubmitResponse
+from app.schemas.question import (
+    QuestionResponse, OptionItem,
+    SubmitRequest, SubmitResponse,
+    AnalysisResponse,
+)
 
 router = APIRouter(prefix="/question", tags=["题目"])
 
@@ -15,10 +19,7 @@ def get_next_question(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """
-    获取题库中用户尚未作答的下一题。
-    """
-    # 查找用户未做过的题目
+    """获取题库中用户尚未作答的下一题"""
     answered_ids = (
         db.query(UserAnswerRecord.question_id)
         .filter(UserAnswerRecord.user_id == user.id)
@@ -35,7 +36,6 @@ def get_next_question(
     if question is None:
         raise HTTPException(status_code=404, detail="该题库已全部刷完")
 
-    # 获取选项
     options = (
         db.query(QuestionOption)
         .filter(QuestionOption.question_id == question.id)
@@ -59,16 +59,13 @@ def submit_answer(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """
-    提交用户答案，返回是否正确及解析。
-    """
+    """提交用户答案，返回是否正确及解析"""
     question = db.query(Question).filter(Question.id == req.question_id).first()
     if question is None:
         raise HTTPException(status_code=404, detail="题目不存在")
 
     is_correct = req.user_answer.strip().upper() == question.answer.strip().upper()
 
-    # 插入或更新答题记录
     record = (
         db.query(UserAnswerRecord)
         .filter(
@@ -98,4 +95,32 @@ def submit_answer(
         is_correct=is_correct,
         correct_answer=question.answer,
         analysis=question.analysis,
+    )
+
+
+@router.get("/{question_id}/analysis", summary="获取解析", response_model=AnalysisResponse)
+def get_analysis(
+    question_id: int,
+    db: Session = Depends(get_db),
+):
+    """获取题目解析"""
+    question = db.query(Question).filter(Question.id == question_id).first()
+    if question is None:
+        raise HTTPException(status_code=404, detail="题目不存在")
+
+    options = (
+        db.query(QuestionOption)
+        .filter(QuestionOption.question_id == question.id)
+        .order_by(QuestionOption.option_key)
+        .all()
+    )
+
+    return AnalysisResponse(
+        id=question.id,
+        type=question.type,
+        content=question.content,
+        answer=question.answer,
+        analysis=question.analysis,
+        difficulty=question.difficulty,
+        options=[OptionItem.model_validate(opt) for opt in options],
     )

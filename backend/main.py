@@ -7,6 +7,7 @@ from app.api.v1.school import router as school_router
 from app.api.v1.subject import router as subject_router
 from app.api.v1.bank import router as bank_router
 from app.api.v1.question import router as question_router
+from app.api.v1.wrong import router as wrong_router
 
 app = FastAPI(
     title="考点通 API",
@@ -30,6 +31,7 @@ app.include_router(school_router, prefix="/api/v1")
 app.include_router(subject_router, prefix="/api/v1")
 app.include_router(bank_router, prefix="/api/v1")
 app.include_router(question_router, prefix="/api/v1")
+app.include_router(wrong_router, prefix="/api/v1")
 
 
 @app.get("/", tags=["健康检查"])

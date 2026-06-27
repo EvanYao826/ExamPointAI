@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.v1.deps import get_db, get_current_user
 from app.models.user import User
 from app.models.bank import QuestionBank
-from app.schemas.bank import BankItem
+from app.schemas.bank import BankItem, BankDetailResponse
 
 router = APIRouter(prefix="/bank", tags=["题库"])
 
@@ -32,3 +32,15 @@ def list_my_banks(
         .order_by(QuestionBank.create_time.desc())
         .all()
     )
+
+
+@router.get("/{bank_id}", summary="题库详情", response_model=BankDetailResponse)
+def get_bank_detail(
+    bank_id: int,
+    db: Session = Depends(get_db),
+):
+    """获取题库详情"""
+    bank = db.query(QuestionBank).filter(QuestionBank.id == bank_id).first()
+    if bank is None:
+        raise HTTPException(status_code=404, detail="题库不存在")
+    return bank

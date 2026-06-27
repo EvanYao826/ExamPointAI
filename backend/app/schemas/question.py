@@ -29,3 +29,29 @@ class SubmitResponse(BaseModel):
     is_correct: bool
     correct_answer: str
     analysis: str
+
+
+class AnalysisResponse(BaseModel):
+    id: int
+    type: str
+    content: str
+    answer: str
+    analysis: str
+    difficulty: int
+    options: list[OptionItem] = []
+
+
+class WrongListItem(BaseModel):
+    question_id: int
+    type: str
+    content: str
+    user_answer: str
+    correct_answer: str
+    bank_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class WrongCountResponse(BaseModel):
+    count: int
