@@ -123,28 +123,12 @@ CREATE TABLE IF NOT EXISTS `upload_task` (
     INDEX `idx_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='上传任务表';
 
--- 11. 用户统计表
+-- 11. 用户统计表（用户级，不按科目区分）
 CREATE TABLE IF NOT EXISTS `user_statistics` (
     `user_id`        BIGINT NOT NULL COMMENT '用户ID',
-    `subject_id`     BIGINT NOT NULL COMMENT '科目ID',
-    `today_count`    INT    DEFAULT 0 COMMENT '今日做题数',
-    `today_correct`  INT    DEFAULT 0 COMMENT '今日正确数',
-    `week_count`     INT    DEFAULT 0 COMMENT '本周做题数',
     `total_count`    INT    DEFAULT 0 COMMENT '累计做题数',
     `total_correct`  INT    DEFAULT 0 COMMENT '累计正确数',
     `continue_days`  INT    DEFAULT 0 COMMENT '连续学习天数',
     `last_study_date` DATE  DEFAULT NULL COMMENT '最后学习日期',
-    PRIMARY KEY (`user_id`, `subject_id`)
+    PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户统计表';
-
--- 12. 每日排行榜持久化表
-CREATE TABLE IF NOT EXISTS `daily_ranking` (
-    `id`            BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '记录ID',
-    `user_id`       BIGINT NOT NULL COMMENT '用户ID',
-    `subject_id`    BIGINT NOT NULL COMMENT '科目ID',
-    `study_date`    DATE   NOT NULL COMMENT '学习日期',
-    `daily_count`   INT    DEFAULT 0 COMMENT '当日刷题数',
-    `daily_correct` INT    DEFAULT 0 COMMENT '当日正确数',
-    UNIQUE KEY `uk_user_subject_date` (`user_id`, `subject_id`, `study_date`),
-    INDEX `idx_subject_date_count` (`subject_id`, `study_date`, `daily_count` DESC)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='每日排行榜持久化表';
