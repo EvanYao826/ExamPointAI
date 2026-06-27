@@ -1,0 +1,125 @@
+.bank-page {
+  min-height: 100vh;
+  background: #e4f0e8;
+}
+
+/* Tab */
+.tabs {
+  display: flex;
+  background: #fff;
+  padding: 0 32rpx;
+  border-bottom: 2rpx solid #d4e8d8;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 28rpx 0;
+  font-size: 30rpx;
+  color: #9ab89a;
+  position: relative;
+}
+
+.tab.active {
+  color: #07c160;
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  right: 30%;
+  height: 6rpx;
+  background: linear-gradient(135deg, #07c160, #4A90D9);
+  border-radius: 3rpx;
+}
+
+/* 搜索 */
+.search-bar {
+  padding: 24rpx 32rpx;
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 40rpx;
+  padding: 0 28rpx;
+  height: 80rpx;
+  border: 2rpx solid #d4e8d8;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  margin-right: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #1a2e1a;
+}
+
+.search-placeholder {
+  color: #9ab89a;
+}
+
+/* 题库列表 */
+.bank-list {
+  padding: 0 32rpx;
+}
+
+.bank-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.08);
+  border: 2rpx solid #d4e8d8;
+}
+
+.bank-hover {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.bank-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.bank-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a2e1a;
+}
+
+.bank-meta {
+  font-size: 24rpx;
+  color: #9ab89a;
+}
+
+.bank-arrow {
+  font-size: 40rpx;
+  color: #d4e8d8;
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9ab89a;
+}

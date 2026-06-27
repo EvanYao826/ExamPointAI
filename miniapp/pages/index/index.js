@@ -39,6 +39,7 @@ Page({
             }
           }
           that.setData({ subjects: res, currentSubject: current })
+          wx.setStorageSync('currentSubjectId', current.id)
         }
       })
       .catch(function () {})
@@ -71,25 +72,25 @@ Page({
 
   goToPublicBank: function () {
     withLogin(function () {
-      wx.showToast({ title: '公共题库开发中', icon: 'none' })
+      wx.navigateTo({ url: '/pages/bank/bank?tab=public' })
     })
   },
 
   goToMyBank: function () {
     withLogin(function () {
-      wx.showToast({ title: '我的题库开发中', icon: 'none' })
+      wx.navigateTo({ url: '/pages/bank/bank?tab=mine' })
     })
   },
 
   goToWrong: function () {
     withLogin(function () {
-      wx.showToast({ title: '错题本开发中', icon: 'none' })
+      wx.navigateTo({ url: '/pages/wrong/wrong' })
     })
   },
 
   goToUpload: function () {
     withLogin(function () {
-      wx.showToast({ title: '上传题库开发中', icon: 'none' })
+      wx.showToast({ title: '上传功能开发中', icon: 'none' })
     })
   },
 })

@@ -1,0 +1,75 @@
+.wrong-page {
+  min-height: 100vh;
+  background: #e4f0e8;
+}
+
+.stats-bar {
+  background: #fff;
+  padding: 24rpx 32rpx;
+  border-bottom: 2rpx solid #d4e8d8;
+}
+
+.stats-text {
+  font-size: 28rpx;
+  color: #5a7a5a;
+}
+
+.wrong-list {
+  padding: 24rpx 32rpx;
+}
+
+.bank-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(7, 193, 96, 0.08);
+  border: 2rpx solid #d4e8d8;
+}
+
+.bank-hover {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.bank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.bank-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a2e1a;
+}
+
+.bank-count {
+  font-size: 24rpx;
+  color: #fa5151;
+}
+
+.bank-arrow {
+  font-size: 40rpx;
+  color: #d4e8d8;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 160rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #9ab89a;
+}

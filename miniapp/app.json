@@ -3,13 +3,16 @@
     "pages/splash/splash",
     "pages/index/index",
     "pages/mine/mine",
-    "pages/settings/settings"
+    "pages/settings/settings",
+    "pages/bank/bank",
+    "pages/question/question",
+    "pages/wrong/wrong"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "考点通",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#f7f8fa"
+    "backgroundColor": "#e4f0e8"
   },
   "tabBar": {
     "custom": true,

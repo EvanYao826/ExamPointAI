@@ -46,7 +46,7 @@ Page({
   },
 
   goToMyBanks: function () {
-    wx.showToast({ title: '开发中', icon: 'none' })
+    wx.navigateTo({ url: '/pages/bank/bank?tab=mine' })
   },
 
   goToSubjects: function () {

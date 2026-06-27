@@ -1,13 +1,12 @@
 import requests as http_requests
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.v1.deps import get_db
 from app.core.config import settings
 from app.core.security import create_access_token
 from app.models.user import User
-from app.schemas.auth import SmsLoginRequest, SmsSendRequest, TokenResponse
+from app.schemas.auth import SmsLoginRequest, SmsSendRequest, TokenResponse, WxLoginRequest
 
 router = APIRouter(prefix="/auth", tags=["认证"])
 
@@ -40,10 +39,6 @@ def sms_login(req: SmsLoginRequest, db: Session = Depends(get_db)):
 
     token = create_access_token({"sub": str(user.id)})
     return TokenResponse(access_token=token)
-
-
-class WxLoginRequest(BaseModel):
-    code: str
 
 
 @router.post("/wx/login", summary="微信登录", response_model=TokenResponse)

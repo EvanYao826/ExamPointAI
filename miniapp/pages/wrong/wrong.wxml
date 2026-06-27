@@ -1,0 +1,31 @@
+<view class="wrong-page">
+  <!-- 总数 -->
+  <view class="stats-bar">
+    <text class="stats-text">共 {{totalCount}} 道错题</text>
+  </view>
+
+  <!-- 按题库分组 -->
+  <view class="wrong-list">
+    <view
+      class="bank-card"
+      wx:for="{{bankList}}"
+      wx:key="bank_id"
+      hover-class="bank-hover"
+      bindtap="goRedo"
+      data-id="{{item.bank_id}}"
+      data-name="{{item.bank_name}}"
+    >
+      <view class="bank-info">
+        <text class="bank-name">📋 {{item.bank_name}}</text>
+        <text class="bank-count">{{item.wrong_count}} 道错题</text>
+      </view>
+      <text class="bank-arrow">›</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{bankList.length === 0 && !loading}}">
+      <text class="empty-icon">🎉</text>
+      <text class="empty-text">暂无错题，继续保持！</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,39 @@
+<view class="bank-page">
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view class="tab {{tab === 'public' ? 'active' : ''}}" bindtap="switchTab" data-tab="public">公共题库</view>
+    <view class="tab {{tab === 'mine' ? 'active' : ''}}" bindtap="switchTab" data-tab="mine">我的题库</view>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-wrap">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索题库" placeholder-class="search-placeholder" bindinput="onSearch" />
+    </view>
+  </view>
+
+  <!-- 题库列表 -->
+  <view class="bank-list">
+    <view
+      class="bank-card"
+      wx:for="{{banks}}"
+      wx:key="id"
+      hover-class="bank-hover"
+      bindtap="goToQuestion"
+      data-id="{{item.id}}"
+      data-name="{{item.name}}"
+    >
+      <view class="bank-info">
+        <text class="bank-name">📋 {{item.name}}</text>
+        <text class="bank-meta">共 {{item.question_count}} 题</text>
+      </view>
+      <text class="bank-arrow">›</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{banks.length === 0 && !loading}}">
+      <text class="empty-text">暂无题库</text>
+    </view>
+  </view>
+</view>

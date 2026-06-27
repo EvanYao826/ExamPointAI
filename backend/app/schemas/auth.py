@@ -13,3 +13,7 @@ class SmsSendRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class WxLoginRequest(BaseModel):
+    code: str

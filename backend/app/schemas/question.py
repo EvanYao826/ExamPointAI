@@ -5,6 +5,7 @@ class OptionItem(BaseModel):
     id: int
     option_key: str
     content: str
+    is_answer: int = 0
 
     class Config:
         from_attributes = True

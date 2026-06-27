@@ -1,0 +1,60 @@
+<view class="question-page">
+  <!-- 顶部 -->
+  <view class="top-bar">
+    <text class="bank-name">{{bankName}}</text>
+    <text class="progress">{{currentIndex + 1}}/{{questions.length}}</text>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <view class="done-wrap" wx:if="{{!loading && questions.length === 0}}">
+    <text class="done-icon">📭</text>
+    <text class="done-text">暂无题目</text>
+    <view class="btn-back" bindtap="goBack">返回</view>
+  </view>
+
+  <view class="question-body" wx:if="{{!loading && questions.length > 0}}">
+    <view class="question-meta">
+      <text class="type-tag">{{typeText}}</text>
+      <text class="difficulty">{{difficultyStars}}</text>
+    </view>
+
+    <text class="question-text">{{questions[currentIndex].content}}</text>
+
+    <!-- 选项 -->
+    <view class="options">
+      <view
+        class="option-item {{item.isCorrect ? 'correct' : ''}} {{item.isWrong ? 'wrong' : ''}} {{item.isMultiSelected ? 'multi-selected' : ''}}"
+        wx:for="{{optionStates}}"
+        wx:key="key"
+        bindtap="selectOption"
+        data-key="{{item.key}}"
+      >
+        <view class="option-key">{{item.key}}</view>
+        <text class="option-content">{{item.content}}</text>
+        <text class="option-mark" wx:if="{{item.isCorrect}}">✓</text>
+        <text class="option-mark wrong-mark" wx:if="{{item.isWrong}}">✗</text>
+      </view>
+    </view>
+
+    <!-- 多选题提交 -->
+    <view class="btn-submit-multi" wx:if="{{typeText === '多选题' && !answers[questions[currentIndex].id] && multiCount > 0}}" bindtap="submitMulti">
+      提交答案（已选{{multiCount}}项）
+    </view>
+
+    <!-- 解析 -->
+    <view class="analysis" wx:if="{{answers[questions[currentIndex].id] && showAnalysis}}">
+      <text class="analysis-title">📖 答案解析</text>
+      <text class="analysis-text">{{answers[questions[currentIndex].id].analysis}}</text>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="action-bar">
+      <view class="btn-nav {{currentIndex <= 0 ? 'disabled' : ''}}" bindtap="prevQuestion">← 上一题</view>
+      <view class="btn-analysis" wx:if="{{answers[questions[currentIndex].id] && !showAnalysis}}" bindtap="toggleAnalysis">查看解析</view>
+      <view class="btn-nav btn-next {{currentIndex >= questions.length - 1 ? 'disabled' : ''}}" bindtap="nextQuestion">下一题 →</view>
+    </view>
+  </view>
+</view>
