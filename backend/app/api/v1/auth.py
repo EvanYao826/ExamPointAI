@@ -5,7 +5,7 @@ from app.api.v1.deps import get_db
 from app.core.config import settings
 from app.core.security import create_access_token
 from app.models.user import User
-from app.schemas.auth import SmsLoginRequest, SmsSendRequest, TokenResponse, UserInfoResponse
+from app.schemas.auth import SmsLoginRequest, SmsSendRequest, TokenResponse
 
 router = APIRouter(prefix="/auth", tags=["认证"])
 
@@ -46,9 +46,3 @@ def sms_login(req: SmsLoginRequest, db: Session = Depends(get_db)):
     # 生成 token
     token = create_access_token({"sub": str(user.id)})
     return TokenResponse(access_token=token)
-
-
-@router.get("/user/profile", summary="获取用户信息", response_model=UserInfoResponse)
-def get_profile(user: User = Depends(__import__("app.api.v1.deps", fromlist=["get_current_user"]).get_current_user)):
-    """获取当前登录用户信息"""
-    return user

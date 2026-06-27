@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.auth import router as auth_router
+from app.api.v1.user import router as user_router
+from app.api.v1.school import router as school_router
 from app.api.v1.question import router as question_router
 
 app = FastAPI(
@@ -21,6 +23,8 @@ app.add_middleware(
 
 # 注册路由
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")
+app.include_router(school_router, prefix="/api/v1")
 app.include_router(question_router, prefix="/api/v1")
 
 
@@ -32,3 +36,8 @@ def root():
 @app.get("/health", tags=["健康检查"])
 def health():
     return {"status": "ok"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

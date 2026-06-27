@@ -13,15 +13,3 @@ class SmsSendRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-
-
-class UserInfoResponse(BaseModel):
-    id: int
-    phone: str
-    nickname: str
-    avatar: str
-    school_id: int | None
-    major_id: int | None
-
-    class Config:
-        from_attributes = True
