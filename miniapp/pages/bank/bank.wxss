@@ -123,3 +123,31 @@
   font-size: 28rpx;
   color: #9ab89a;
 }
+
+/* 浮动添加按钮 */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: 160rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #07c160, #4A90D9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.4);
+  z-index: 50;
+}
+
+.fab-hover {
+  opacity: 0.8;
+  transform: scale(0.95);
+}
+
+.fab-icon {
+  font-size: 52rpx;
+  color: #fff;
+  font-weight: 300;
+  margin-top: -4rpx;
+}

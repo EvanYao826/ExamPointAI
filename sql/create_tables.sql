@@ -8,14 +8,16 @@ USE exam_point;
 -- 1. 用户表
 CREATE TABLE IF NOT EXISTS `user` (
     `id`          BIGINT       PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
-    `phone`       VARCHAR(20)  NOT NULL COMMENT '手机号',
+    `phone`       VARCHAR(20)  DEFAULT NULL COMMENT '手机号',
+    `openid`      VARCHAR(100) DEFAULT NULL COMMENT '微信openid',
     `nickname`    VARCHAR(50)  DEFAULT '' COMMENT '昵称',
     `avatar`      VARCHAR(255) DEFAULT '' COMMENT '头像地址',
-    `school_id`   BIGINT       DEFAULT NULL COMMENT '学校ID',
-    `major_id`    BIGINT       DEFAULT NULL COMMENT '专业ID',
+    `school_name` VARCHAR(100) DEFAULT NULL COMMENT '学校名称',
+    `major_name`  VARCHAR(100) DEFAULT NULL COMMENT '专业名称',
     `create_time` DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    UNIQUE KEY `uk_phone` (`phone`)
+    UNIQUE KEY `uk_phone` (`phone`),
+    UNIQUE KEY `uk_openid` (`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- 2. 学校表
@@ -37,10 +39,11 @@ CREATE TABLE IF NOT EXISTS `major` (
 
 -- 4. 科目表
 CREATE TABLE IF NOT EXISTS `subject` (
-    `id`   BIGINT       PRIMARY KEY AUTO_INCREMENT COMMENT '科目ID',
-    `name` VARCHAR(50)  NOT NULL COMMENT '科目名称',
-    `icon` VARCHAR(255) DEFAULT '' COMMENT '图标地址',
-    `sort` INT          DEFAULT 0 COMMENT '排序'
+    `id`     BIGINT       PRIMARY KEY AUTO_INCREMENT COMMENT '科目ID',
+    `name`   VARCHAR(50)  NOT NULL COMMENT '科目名称',
+    `icon`   VARCHAR(255) DEFAULT '' COMMENT '图标地址',
+    `sort`   INT          DEFAULT 0 COMMENT '排序',
+    `source` TINYINT      DEFAULT 0 COMMENT '来源：0管理员添加 1用户添加'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='科目表';
 
 -- 5. 用户科目关联表

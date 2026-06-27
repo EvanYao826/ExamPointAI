@@ -10,6 +10,7 @@ class Subject(Base):
     name = Column(String(50), nullable=False, comment="科目名称")
     icon = Column(String(255), default="", comment="图标地址")
     sort = Column(Integer, default=0, comment="排序")
+    source = Column(Integer, default=0, comment="来源：0管理员添加 1用户添加")
 
 
 class UserSubject(Base):

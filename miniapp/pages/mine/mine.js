@@ -49,12 +49,8 @@ Page({
     wx.navigateTo({ url: '/pages/bank/bank?tab=mine' })
   },
 
-  goToSubjects: function () {
-    wx.showToast({ title: '开发中', icon: 'none' })
-  },
-
-  goToSchool: function () {
-    wx.showToast({ title: '开发中', icon: 'none' })
+  goToProfile: function () {
+    wx.navigateTo({ url: '/pages/profile/profile' })
   },
 
   goToSettings: function () {

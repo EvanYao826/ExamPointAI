@@ -59,4 +59,9 @@ Page({
       url: '/pages/question/question?bank_id=' + id + '&bank_name=' + encodeURIComponent(name),
     })
   },
+
+  // 跳转添加题库页
+  onUpload: function () {
+    wx.navigateTo({ url: '/pages/upload/upload' })
+  },
 })

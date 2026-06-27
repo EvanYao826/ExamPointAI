@@ -6,6 +6,7 @@ from app.api.v1.deps import get_db
 from app.core.config import settings
 from app.core.security import create_access_token
 from app.models.user import User
+from app.models.subject import UserSubject
 from app.schemas.auth import SmsLoginRequest, SmsSendRequest, TokenResponse, WxLoginRequest
 
 router = APIRouter(prefix="/auth", tags=["认证"])
@@ -38,7 +39,8 @@ def sms_login(req: SmsLoginRequest, db: Session = Depends(get_db)):
         db.refresh(user)
 
     token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(access_token=token)
+    needs_profile = _check_needs_profile(db, user)
+    return TokenResponse(access_token=token, needs_profile=needs_profile)
 
 
 @router.post("/wx/login", summary="微信登录", response_model=TokenResponse)
@@ -79,4 +81,13 @@ def wx_login(req: WxLoginRequest, db: Session = Depends(get_db)):
         db.refresh(user)
 
     token = create_access_token({"sub": str(user.id)})
-    return TokenResponse(access_token=token)
+    needs_profile = _check_needs_profile(db, user)
+    return TokenResponse(access_token=token, needs_profile=needs_profile)
+
+
+def _check_needs_profile(db: Session, user: User) -> bool:
+    """检查用户是否需要填写学校/专业/科目信息"""
+    if not user.school_name:
+        return True
+    has_subject = db.query(UserSubject).filter(UserSubject.user_id == user.id).first()
+    return has_subject is None

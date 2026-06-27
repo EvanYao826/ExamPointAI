@@ -31,9 +31,13 @@
       <text class="bank-arrow">›</text>
     </view>
 
-    <!-- 空状态 -->
     <view class="empty" wx:if="{{banks.length === 0 && !loading}}">
       <text class="empty-text">暂无题库</text>
     </view>
+  </view>
+
+  <!-- 添加题库按钮（仅我的题库显示） -->
+  <view class="fab" wx:if="{{tab === 'mine'}}" hover-class="fab-hover" bindtap="onUpload">
+    <text class="fab-icon">+</text>
   </view>
 </view>

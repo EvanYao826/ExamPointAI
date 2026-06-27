@@ -16,7 +16,7 @@ function isLoggedIn() {
  * 微信登录流程
  * 1. wx.login 获取 code
  * 2. 发送 code 给后端换 token
- * 3. 返回 token
+ * 3. 返回 { token, needsProfile }
  */
 function wxLogin() {
   return new Promise(function (resolve, reject) {
@@ -34,7 +34,10 @@ function wxLogin() {
           success: function (r) {
             if (r.statusCode === 200 && r.data && r.data.access_token) {
               app.setToken(r.data.access_token)
-              resolve(r.data.access_token)
+              resolve({
+                token: r.data.access_token,
+                needsProfile: r.data.needs_profile || false,
+              })
             } else {
               reject(new Error('登录失败'))
             }
@@ -50,6 +53,7 @@ function wxLogin() {
 /**
  * 弹出登录确认框
  * 用户确认后调用 wx.login
+ * @returns {Promise<{token: string, needsProfile: boolean}>}
  */
 function requireLogin() {
   return new Promise(function (resolve, reject) {
@@ -75,13 +79,19 @@ function requireLogin() {
 
 /**
  * 需要登录才能执行的操作
- * @param {Function} fn - 登录成功后执行的回调
+ * @param {Function} fn - 登录成功后执行的回调（仅在不需要填写资料时调用）
  */
 function withLogin(fn) {
   if (isLoggedIn()) {
     fn()
   } else {
-    requireLogin().then(fn).catch(function () {})
+    requireLogin().then(function (result) {
+      if (result.needsProfile) {
+        wx.navigateTo({ url: '/pages/profile/profile' })
+      } else {
+        fn()
+      }
+    }).catch(function () {})
   }
 }
 

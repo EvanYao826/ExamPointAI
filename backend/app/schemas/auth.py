@@ -13,6 +13,7 @@ class SmsSendRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    needs_profile: bool = False
 
 
 class WxLoginRequest(BaseModel):

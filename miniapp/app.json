@@ -6,7 +6,9 @@
     "pages/settings/settings",
     "pages/bank/bank",
     "pages/question/question",
-    "pages/wrong/wrong"
+    "pages/wrong/wrong",
+    "pages/upload/upload",
+    "pages/profile/profile"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

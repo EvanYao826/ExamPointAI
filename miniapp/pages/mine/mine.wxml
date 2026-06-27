@@ -45,12 +45,8 @@
       <text class="menu-text">📚 我的题库</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goToSubjects">
-      <text class="menu-text">📝 修改科目</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToSchool">
-      <text class="menu-text">🏫 修改学校/专业</text>
+    <view class="menu-item" bindtap="goToProfile">
+      <text class="menu-text">📝 修改信息</text>
       <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="goToSettings">

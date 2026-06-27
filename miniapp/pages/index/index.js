@@ -23,13 +23,13 @@ Page({
     }
   },
 
-  // 加载科目列表
+  // 加载科目列表（优先用户已选科目，未登录则加载全部）
   loadSubjects: function () {
     var that = this
-    request('/api/v1/subject/list')
+    var url = getApp().globalData.token ? '/api/v1/user/subjects' : '/api/v1/subject/list'
+    request(url)
       .then(function (res) {
         if (res.length > 0) {
-          // 读取上次选中的科目，默认第一个
           var savedId = wx.getStorageSync('currentSubjectId')
           var current = res[0]
           for (var i = 0; i < res.length; i++) {
@@ -90,7 +90,7 @@ Page({
 
   goToUpload: function () {
     withLogin(function () {
-      wx.showToast({ title: '上传功能开发中', icon: 'none' })
+      wx.navigateTo({ url: '/pages/upload/upload' })
     })
   },
 })

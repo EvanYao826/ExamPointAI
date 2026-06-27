@@ -1,0 +1,80 @@
+<view class="profile-page">
+  <!-- 标题提示 -->
+  <view class="header">
+    <text class="title">完善个人信息</text>
+    <text class="subtitle">填写你的学校、专业和科目</text>
+  </view>
+
+  <!-- 学校 -->
+  <view class="form-group">
+    <text class="label">学校</text>
+    <input
+      class="input-field"
+      placeholder="请输入学校名称"
+      value="{{schoolName}}"
+      bindinput="onSchoolInput"
+    />
+  </view>
+
+  <!-- 专业 -->
+  <view class="form-group">
+    <text class="label">专业</text>
+    <input
+      class="input-field"
+      placeholder="请输入专业名称"
+      value="{{majorName}}"
+      bindinput="onMajorInput"
+    />
+  </view>
+
+  <!-- 科目选择 -->
+  <view class="form-group">
+    <text class="label">科目（可多选）</text>
+    <view class="search-wrap">
+      <input
+        class="input-field"
+        placeholder="选择或者添加科目"
+        value="{{subjectInput}}"
+        bindinput="onSubjectInput"
+        bindfocus="onSubjectFocus"
+        bindblur="onSubjectBlur"
+      />
+      <view class="dropdown" wx:if="{{showSubjectDropdown}}">
+        <view
+          class="dropdown-item"
+          wx:for="{{filteredSubjects}}"
+          wx:key="id"
+          catchtap="onSubjectItemTap"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+        >
+          <text>{{item.name}}</text>
+        </view>
+        <view class="dropdown-empty" wx:if="{{filteredSubjects.length === 0}}">
+          <text>无匹配科目</text>
+        </view>
+      </view>
+    </view>
+    <view class="add-btn-wrap">
+      <button class="btn-add-subject" size="mini" bindtap="addCustomSubject">添加科目</button>
+    </view>
+
+    <!-- 已选科目标签 -->
+    <view class="tags-wrap" wx:if="{{selectedSubjects.length > 0}}">
+      <view class="tag" wx:for="{{selectedSubjects}}" wx:key="name">
+        <text>{{item.name}}</text>
+        <text class="tag-remove" catchtap="removeSubject" data-index="{{index}}">×</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 按钮 -->
+  <view class="btn-group">
+    <button class="btn-submit" bindtap="submit" loading="{{submitting}}" disabled="{{submitting}}">
+      保存并开始
+    </button>
+    <view class="btn-skip" bindtap="skip">
+      <text>暂时跳过</text>
+    </view>
+  </view>
+</view>

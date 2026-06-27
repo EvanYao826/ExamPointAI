@@ -1,0 +1,166 @@
+.profile-page {
+  min-height: 100vh;
+  padding: 32rpx;
+  background: #e4f0e8;
+}
+
+.header {
+  padding: 40rpx 0 20rpx;
+  text-align: center;
+}
+
+.title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1a2e1a;
+}
+
+.subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: #6b8f6b;
+  margin-top: 12rpx;
+}
+
+.form-group {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(7, 193, 96, 0.08);
+  border: 2rpx solid #e8f8ee;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #1a2e1a;
+  margin-bottom: 20rpx;
+}
+
+/* 通用输入框 */
+.input-field {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 24rpx;
+  background: #f5faf7;
+  border: 2rpx solid #e0f0e4;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 搜索框容器 */
+.search-wrap {
+  position: relative;
+}
+
+/* 下拉列表 */
+.dropdown {
+  position: absolute;
+  top: 84rpx;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 2rpx solid #e0f0e4;
+  border-radius: 16rpx;
+  max-height: 400rpx;
+  overflow-y: auto;
+  z-index: 200;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+}
+
+.dropdown-item {
+  padding: 24rpx;
+  border-bottom: 2rpx solid #f0f7f2;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:active {
+  background: #e8f8ee;
+}
+
+.dropdown-empty {
+  padding: 32rpx;
+  text-align: center;
+  color: #8fad8f;
+  font-size: 26rpx;
+}
+
+/* 添加科目按钮 */
+.add-btn-wrap {
+  margin-top: 16rpx;
+}
+
+.btn-add-subject {
+  background: #e8f8ee;
+  color: #07c160;
+  font-size: 26rpx;
+  border: 2rpx solid #07c160;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  height: 56rpx;
+  line-height: 52rpx;
+}
+
+/* 科目标签 */
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 20rpx;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 20rpx;
+  background: #07c160;
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+}
+
+.tag-remove {
+  font-size: 30rpx;
+  margin-left: 4rpx;
+}
+
+/* 按钮 */
+.btn-group {
+  margin-top: 40rpx;
+  padding: 0 16rpx;
+}
+
+.btn-submit {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 44rpx;
+  border: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-submit[disabled] {
+  opacity: 0.6;
+}
+
+.btn-skip {
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 26rpx;
+  color: #8fad8f;
+}
