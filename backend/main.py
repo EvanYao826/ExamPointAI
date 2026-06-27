@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.auth import router as auth_router
 from app.api.v1.user import router as user_router
 from app.api.v1.school import router as school_router
+from app.api.v1.subject import router as subject_router
+from app.api.v1.bank import router as bank_router
 from app.api.v1.question import router as question_router
 
 app = FastAPI(
@@ -25,6 +27,8 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(user_router, prefix="/api/v1")
 app.include_router(school_router, prefix="/api/v1")
+app.include_router(subject_router, prefix="/api/v1")
+app.include_router(bank_router, prefix="/api/v1")
 app.include_router(question_router, prefix="/api/v1")
 
 
