@@ -4,6 +4,30 @@
   padding-bottom: 160rpx;
 }
 
+/* 格式说明 */
+.format-tip {
+  margin: 24rpx 32rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #d4e8d8;
+}
+
+.tip-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a2e1a;
+  margin-bottom: 12rpx;
+}
+
+.tip-item {
+  display: block;
+  font-size: 24rpx;
+  color: #6b8f6b;
+  line-height: 1.8;
+}
+
 /* Tab */
 .tabs {
   display: flex;
@@ -107,9 +131,29 @@
   color: #9ab89a;
 }
 
+.task-error {
+  color: #fa5151;
+}
+
+.task-parsing {
+  color: #ff9900;
+}
+
 .task-time {
   font-size: 22rpx;
   color: #b2b2b2;
+}
+
+.task-action {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 2rpx solid #f0f7f2;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #07c160;
+  font-weight: 500;
 }
 
 /* 空状态 */
@@ -128,6 +172,12 @@
 .empty-text {
   font-size: 26rpx;
   color: #9ab89a;
+}
+
+.empty-hint {
+  font-size: 22rpx;
+  color: #b2b2b2;
+  margin-top: 12rpx;
 }
 
 /* 上传按钮 */

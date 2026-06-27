@@ -1,8 +1,16 @@
 <view class="upload-page">
+  <!-- 格式说明 -->
+  <view class="format-tip">
+    <text class="tip-title">📄 支持格式</text>
+    <text class="tip-item">• Word 文档（.docx）</text>
+    <text class="tip-item">• PDF 文档（.pdf）</text>
+    <text class="tip-item">• 文件大小不超过 20MB</text>
+  </view>
+
   <!-- Tab 切换 -->
   <view class="tabs">
     <view class="tab {{tab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">全部题库</view>
-    <view class="tab {{tab === 'done' ? 'active' : ''}}" bindtap="switchTab" data-tab="done">已上传</view>
+    <view class="tab {{tab === 'done' ? 'active' : ''}}" bindtap="switchTab" data-tab="done">成功上传</view>
   </view>
 
   <!-- 题库列表 -->
@@ -11,19 +19,38 @@
       <view class="task-top">
         <text class="task-name">{{item.bank_name || '未知题库'}}</text>
         <view class="status-badge status-{{item.status}}">
-          {{item.status === 0 ? '已上传' : item.status === 1 ? '解析中' : item.status === 2 ? '解析成功' : '解析失败'}}
+          {{item.status === 0 ? '等待解析' : item.status === 1 ? '解析中...' : item.status === 2 ? '解析成功' : '解析失败'}}
         </view>
       </view>
       <view class="task-bottom">
-        <text class="task-info">{{item.success_count || 0}} 题成功 · {{item.fail_count || 0}} 题失败</text>
+        <!-- 解析成功 -->
+        <text class="task-info" wx:if="{{item.status === 2}}">
+          共解析出 {{item.success_count}} 题{{item.fail_count > 0 ? '，' + item.fail_count + ' 题解析失败' : ''}}
+        </text>
+        <!-- 解析失败 -->
+        <text class="task-info task-error" wx:elif="{{item.status === 3}}">
+          {{item.error_msg || '解析失败，请检查文档格式'}}
+        </text>
+        <!-- 解析中 -->
+        <text class="task-info task-parsing" wx:elif="{{item.status === 1}}">
+          正在解析中，请稍候...
+        </text>
+        <!-- 等待解析 -->
+        <text class="task-info" wx:elif="{{item.status === 0}}">
+          等待解析
+        </text>
         <text class="task-time">{{item.create_time}}</text>
+      </view>
+      <!-- 成功的题库可以点击刷题 -->
+      <view class="task-action" wx:if="{{item.status === 2 && item.success_count > 0}}" bindtap="goToBank" data-id="{{item.bank_id}}">
+        <text class="action-text">开始刷题 →</text>
       </view>
     </view>
 
     <!-- 空状态 -->
     <view class="empty" wx:if="{{tasks.length === 0 && !loading}}">
       <text class="empty-icon">📭</text>
-      <text class="empty-text">暂无题库，点击下方按钮上传</text>
+      <text class="empty-text">{{tab === 'done' ? '暂无解析成功的题库' : '暂无题库，点击下方按钮上传'}}</text>
     </view>
   </view>
 

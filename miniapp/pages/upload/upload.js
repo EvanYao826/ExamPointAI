@@ -1,18 +1,12 @@
 var request = require('../../utils/request').request
 
-// 状态映射
-var STATUS = {
-  0: '已上传',
-  1: '解析中',
-  2: '解析成功',
-  3: '解析失败',
-}
-
 Page({
   data: {
     tab: 'all',
     tasks: [],
+    allTasks: [],
     loading: false,
+    pollingTimer: null,
   },
 
   onLoad: function () {
@@ -23,30 +17,76 @@ Page({
     this.loadTasks()
   },
 
+  onUnload: function () {
+    if (this.data.pollingTimer) {
+      clearInterval(this.data.pollingTimer)
+    }
+  },
+
   switchTab: function (e) {
-    this.setData({ tab: e.currentTarget.dataset.tab })
-    this.loadTasks()
+    var tab = e.currentTarget.dataset.tab
+    this.setData({ tab: tab })
+    this.filterTasks()
+  },
+
+  filterTasks: function () {
+    var all = this.data.allTasks
+    if (this.data.tab === 'done') {
+      // 只显示解析成功且有题目的
+      var done = all.filter(function (t) {
+        return t.status === 2 && t.success_count > 0
+      })
+      this.setData({ tasks: done })
+    } else {
+      this.setData({ tasks: all })
+    }
   },
 
   loadTasks: function () {
     var that = this
     that.setData({ loading: true })
-
-    var url = '/api/v1/upload/tasks'
-    if (that.data.tab === 'done') {
-      url += '?status=0'
-    }
-
-    request(url)
+    request('/api/v1/upload/tasks')
       .then(function (res) {
-        that.setData({ tasks: res, loading: false })
+        that.setData({ allTasks: res, loading: false })
+        that.filterTasks()
+        that.checkAndStartPolling(res)
       })
       .catch(function () {
         that.setData({ loading: false })
       })
   },
 
-  // 上传题库
+  checkAndStartPolling: function (tasks) {
+    var hasParsing = false
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].status === 1) {
+        hasParsing = true
+        break
+      }
+    }
+
+    if (hasParsing && !this.data.pollingTimer) {
+      this.startPolling()
+    } else if (!hasParsing && this.data.pollingTimer) {
+      this.stopPolling()
+    }
+  },
+
+  startPolling: function () {
+    var that = this
+    var timer = setInterval(function () {
+      that.loadTasks()
+    }, 3000)
+    that.setData({ pollingTimer: timer })
+  },
+
+  stopPolling: function () {
+    if (this.data.pollingTimer) {
+      clearInterval(this.data.pollingTimer)
+      this.setData({ pollingTimer: null })
+    }
+  },
+
   onUpload: function () {
     var that = this
     wx.chooseMessageFile({
@@ -97,5 +137,10 @@ Page({
         wx.showToast({ title: '上传失败', icon: 'none' })
       },
     })
+  },
+
+  goToBank: function (e) {
+    var bankId = e.currentTarget.dataset.id
+    wx.navigateTo({ url: '/pages/question/question?bank_id=' + bankId })
   },
 })

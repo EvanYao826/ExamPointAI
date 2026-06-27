@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     ALGORITHM: str = "HS256"
 
+    # Celery（上线后改为 True）
+    USE_CELERY: bool = False
+
     # SMS
     SMS_MOCK: bool = True  # 开发阶段使用固定验证码
 
