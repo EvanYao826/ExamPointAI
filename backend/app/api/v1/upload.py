@@ -100,12 +100,14 @@ def list_tasks(
     user: User = Depends(get_current_user),
 ):
     """获取用户的上传任务列表"""
+    from sqlalchemy import desc
     query = db.query(UploadTask).filter(UploadTask.user_id == user.id)
 
     if status is not None:
         query = query.filter(UploadTask.status == status)
 
-    tasks = query.order_by(UploadTask.create_time.desc()).all()
+    # 置顶排最前，然后按创建时间倒序
+    tasks = query.order_by(desc(UploadTask.pinned), desc(UploadTask.create_time)).all()
 
     result = []
     for t in tasks:
@@ -125,6 +127,7 @@ def list_tasks(
             "success_count": t.success_count,
             "fail_count": t.fail_count,
             "error_msg": t.error_msg,
+            "pinned": t.pinned or 0,
             "create_time": str(t.create_time) if t.create_time else "",
         })
 
@@ -164,3 +167,88 @@ def get_task(
         "error_msg": task.error_msg,
         "create_time": str(task.create_time) if task.create_time else "",
     }
+
+
+@router.put("/task/{task_id}/rename", summary="重命名题库")
+def rename_task(
+    task_id: int,
+    body: dict,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """重命名题库"""
+    task = db.query(UploadTask).filter(
+        UploadTask.id == task_id,
+        UploadTask.user_id == user.id,
+    ).first()
+
+    if not task:
+        raise HTTPException(status_code=404, detail="任务不存在")
+
+    new_name = body.get("name", "").strip()
+    if not new_name:
+        raise HTTPException(status_code=400, detail="名称不能为空")
+
+    # 更新题库名称
+    if task.bank_id:
+        bank = db.query(QuestionBank).filter(QuestionBank.id == task.bank_id).first()
+        if bank:
+            bank.name = new_name
+            db.commit()
+
+    return {"code": 0, "msg": "重命名成功"}
+
+
+@router.put("/task/{task_id}/pin", summary="置顶/取消置顶")
+def pin_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """切换题库置顶状态"""
+    task = db.query(UploadTask).filter(
+        UploadTask.id == task_id,
+        UploadTask.user_id == user.id,
+    ).first()
+
+    if not task:
+        raise HTTPException(status_code=404, detail="任务不存在")
+
+    task.pinned = 0 if task.pinned else 1
+    db.commit()
+
+    return {"code": 0, "msg": "已置顶" if task.pinned else "已取消置顶", "pinned": task.pinned}
+
+
+@router.delete("/task/{task_id}", summary="删除题库")
+def delete_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """删除题库及相关数据"""
+    task = db.query(UploadTask).filter(
+        UploadTask.id == task_id,
+        UploadTask.user_id == user.id,
+    ).first()
+
+    if not task:
+        raise HTTPException(status_code=404, detail="任务不存在")
+
+    # 删除题库及题目
+    if task.bank_id:
+        from app.models.question import Question, QuestionOption
+        # 删除选项
+        questions = db.query(Question).filter(Question.bank_id == task.bank_id).all()
+        for q in questions:
+            db.query(QuestionOption).filter(QuestionOption.question_id == q.id).delete()
+        # 删除题目
+        db.query(Question).filter(Question.bank_id == task.bank_id).delete()
+        # 删除题库
+        db.query(QuestionBank).filter(QuestionBank.id == task.bank_id).delete()
+
+    # 删除任务
+    db.delete(task)
+    db.commit()
+
+    return {"code": 0, "msg": "删除成功"}

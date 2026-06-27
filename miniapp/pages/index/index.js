@@ -40,6 +40,7 @@ Page({
           }
           that.setData({ subjects: res, currentSubject: current })
           wx.setStorageSync('currentSubjectId', current.id)
+          wx.setStorageSync('currentSubjectName', current.name)
         }
       })
       .catch(function () {})
@@ -64,6 +65,7 @@ Page({
       showPicker: false,
     })
     wx.setStorageSync('currentSubjectId', id)
+    wx.setStorageSync('currentSubjectName', name)
   },
 
   switchTab: function (e) {

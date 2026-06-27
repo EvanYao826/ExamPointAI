@@ -4,9 +4,37 @@
   padding-bottom: 160rpx;
 }
 
+/* 当前科目提示 */
+.subject-tip {
+  display: flex;
+  align-items: center;
+  margin: 24rpx 32rpx 0;
+  padding: 20rpx 24rpx;
+  background: #e8f8ee;
+  border-radius: 12rpx;
+  border: 2rpx solid #07c160;
+}
+
+.tip-label {
+  font-size: 26rpx;
+  color: #6b8f6b;
+}
+
+.tip-value {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #07c160;
+  flex: 1;
+}
+
+.tip-change {
+  font-size: 24rpx;
+  color: #07c160;
+}
+
 /* 格式说明 */
 .format-tip {
-  margin: 24rpx 32rpx;
+  margin: 16rpx 32rpx 0;
   padding: 24rpx;
   background: #fff;
   border-radius: 16rpx;
@@ -33,6 +61,7 @@
   display: flex;
   background: #fff;
   border-bottom: 2rpx solid #d4e8d8;
+  margin-top: 16rpx;
 }
 
 .tab {
@@ -71,6 +100,26 @@
   padding: 28rpx;
   margin-bottom: 16rpx;
   border: 2rpx solid #d4e8d8;
+  position: relative;
+}
+
+.task-card.pinned {
+  border-color: #07c160;
+  background: #fafffe;
+}
+
+.task-name-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+  margin-right: 12rpx;
+}
+
+.pin-icon {
+  font-size: 24rpx;
+  margin-right: 8rpx;
+  flex-shrink: 0;
 }
 
 .task-top {
@@ -84,11 +133,66 @@
   font-size: 28rpx;
   font-weight: 600;
   color: #1a2e1a;
-  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-right: 16rpx;
+}
+
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+/* 菜单按钮 */
+.menu-btn {
+  font-size: 32rpx;
+  color: #9ab89a;
+  padding: 0 8rpx;
+  letter-spacing: 2rpx;
+}
+
+/* 菜单弹窗 */
+.menu-popup {
+  position: absolute;
+  top: 80rpx;
+  right: 24rpx;
+  background: #fff;
+  border-radius: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  overflow: hidden;
+  min-width: 200rpx;
+}
+
+.menu-item {
+  padding: 24rpx 32rpx;
+  font-size: 26rpx;
+  color: #1a2e1a;
+  border-bottom: 2rpx solid #f0f7f2;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: #f5faf7;
+}
+
+.menu-danger {
+  color: #fa5151;
+}
+
+/* 遮罩层 */
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
 }
 
 /* 状态标签 */
@@ -97,7 +201,6 @@
   padding: 4rpx 16rpx;
   border-radius: 8rpx;
   font-weight: 500;
-  flex-shrink: 0;
 }
 
 .status-0 {
@@ -172,12 +275,6 @@
 .empty-text {
   font-size: 26rpx;
   color: #9ab89a;
-}
-
-.empty-hint {
-  font-size: 22rpx;
-  color: #b2b2b2;
-  margin-top: 12rpx;
 }
 
 /* 上传按钮 */

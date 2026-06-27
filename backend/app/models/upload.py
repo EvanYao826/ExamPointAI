@@ -16,4 +16,5 @@ class UploadTask(Base):
     success_count = Column(SmallInteger, default=0, comment="成功解析题数")
     fail_count = Column(SmallInteger, default=0, comment="失败题数")
     error_msg = Column(Text, default=None, comment="错误信息")
+    pinned = Column(SmallInteger, default=0, comment="是否置顶：0否 1是")
     create_time = Column(DateTime, server_default=func.now(), comment="创建时间")
