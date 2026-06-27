@@ -11,6 +11,9 @@ Page({
     rankingList: [],
     myRank: 0,
     myCount: 0,
+    totalCount: 0,
+    totalAccuracy: '0.0',
+    continueDays: 0,
   },
 
   onLoad: function () {
@@ -20,6 +23,11 @@ Page({
   onShow: function () {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 })
+    }
+    // 切回首页时刷新排行和统计
+    if (this.data.currentSubject.id) {
+      this.loadRanking()
+      this.loadStatistics()
     }
   },
 
@@ -41,6 +49,8 @@ Page({
           that.setData({ subjects: res, currentSubject: current })
           wx.setStorageSync('currentSubjectId', current.id)
           wx.setStorageSync('currentSubjectName', current.name)
+          that.loadRanking()
+          that.loadStatistics()
         }
       })
       .catch(function () {})
@@ -66,10 +76,48 @@ Page({
     })
     wx.setStorageSync('currentSubjectId', id)
     wx.setStorageSync('currentSubjectName', name)
+    this.loadRanking()
+    this.loadStatistics()
   },
 
   switchTab: function (e) {
-    this.setData({ rankingTab: e.currentTarget.dataset.tab })
+    var tab = e.currentTarget.dataset.tab
+    this.setData({ rankingTab: tab })
+    this.loadRanking()
+  },
+
+  // 加载学习统计
+  loadStatistics: function () {
+    var that = this
+    var subjectId = that.data.currentSubject.id
+    if (!subjectId) return
+    request('/api/v1/statistics/overview?subject_id=' + subjectId)
+      .then(function (res) {
+        that.setData({
+          totalCount: res.total_count || 0,
+          totalAccuracy: res.total_accuracy ? (res.total_accuracy * 100).toFixed(1) : '0.0',
+          continueDays: res.continue_days || 0,
+        })
+      })
+      .catch(function () {})
+  },
+
+  // 加载排行榜
+  loadRanking: function () {
+    var that = this
+    var subjectId = that.data.currentSubject.id
+    if (!subjectId) return
+    var tab = that.data.rankingTab
+    var url = '/api/v1/ranking/' + tab + '?subject_id=' + subjectId
+    request(url)
+      .then(function (res) {
+        that.setData({
+          rankingList: res.list || [],
+          myRank: res.my_rank || 0,
+          myCount: res.my_score || 0,
+        })
+      })
+      .catch(function () {})
   },
 
   goToPublicBank: function () {

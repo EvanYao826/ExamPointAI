@@ -1,9 +1,13 @@
+from datetime import date, timedelta
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.v1.deps import get_db, get_current_user
 from app.models.user import User
+from app.models.bank import QuestionBank
 from app.models.question import Question, QuestionOption, UserAnswerRecord
+from app.models.ranking import UserStatistics
 from app.schemas.question import (
     QuestionResponse, OptionItem,
     SubmitRequest, SubmitResponse,
@@ -89,7 +93,15 @@ def submit_answer(
         )
         db.add(record)
 
+    # 记录是否为新答题（用于统计更新）
+    is_new_record = record.id is None
+
     db.commit()
+
+    # --- 排行榜 + 统计更新 ---
+    bank = db.query(QuestionBank).filter(QuestionBank.id == question.bank_id).first()
+    if bank and is_new_record:
+        _update_ranking_and_stats(db, user.id, bank.subject_id, is_correct)
 
     return SubmitResponse(
         is_correct=is_correct,
@@ -124,3 +136,61 @@ def get_analysis(
         difficulty=question.difficulty,
         options=[OptionItem.model_validate(opt) for opt in options],
     )
+
+
+def _update_ranking_and_stats(db: Session, user_id: int, subject_id: int, is_correct: bool) -> None:
+    """答题后更新 Redis 排行榜 + MySQL 用户统计"""
+    # 1. Redis 排行榜
+    try:
+        from app.core.redis import incr_score
+        incr_score(subject_id, user_id)
+    except Exception:
+        pass  # Redis 不可用时不影响主流程
+
+    # 2. MySQL 用户统计
+    today = date.today()
+    stats = (
+        db.query(UserStatistics)
+        .filter(UserStatistics.user_id == user_id, UserStatistics.subject_id == subject_id)
+        .first()
+    )
+
+    if stats is None:
+        stats = UserStatistics(
+            user_id=user_id,
+            subject_id=subject_id,
+            today_count=0,
+            today_correct=0,
+            week_count=0,
+            total_count=0,
+            total_correct=0,
+            continue_days=0,
+            last_study_date=None,
+        )
+        db.add(stats)
+
+    # 日期边界处理
+    if stats.last_study_date != today:
+        stats.today_count = 0
+        stats.today_correct = 0
+
+        # 连续天数：昨天则 +1，否则重置
+        if stats.last_study_date == today - timedelta(days=1):
+            stats.continue_days += 1
+        else:
+            stats.continue_days = 1
+
+    # 周边界处理
+    if stats.last_study_date is None or stats.last_study_date.isocalendar()[1] != today.isocalendar()[1]:
+        stats.week_count = 0
+
+    # 累加
+    stats.today_count += 1
+    stats.week_count += 1
+    stats.total_count += 1
+    if is_correct:
+        stats.today_correct += 1
+        stats.total_correct += 1
+    stats.last_study_date = today
+
+    db.commit()

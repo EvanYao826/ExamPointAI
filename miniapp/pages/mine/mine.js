@@ -41,6 +41,25 @@ Page({
             phone: phone.length === 11 ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '',
           },
         })
+        that.loadStatistics()
+      })
+      .catch(function () {})
+  },
+
+  // 加载学习统计
+  loadStatistics: function () {
+    var that = this
+    var subjectId = wx.getStorageSync('currentSubjectId')
+    if (!subjectId) return
+    request('/api/v1/statistics/overview?subject_id=' + subjectId)
+      .then(function (res) {
+        that.setData({
+          stats: {
+            total_count: res.total_count || 0,
+            accuracy: res.total_accuracy ? (res.total_accuracy * 100).toFixed(1) : '0.0',
+            continue_days: res.continue_days || 0,
+          },
+        })
       })
       .catch(function () {})
   },

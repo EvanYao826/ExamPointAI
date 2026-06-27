@@ -134,6 +134,43 @@
   color: #1a2e1a;
 }
 
+/* 学习统计 */
+.stats-card {
+  margin: 0 32rpx 24rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 6rpx 24rpx rgba(7, 193, 96, 0.12);
+  border: 2rpx solid #d4e8d8;
+}
+
+.stats-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #07c160;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  color: #9ab89a;
+  margin-top: 8rpx;
+}
+
+.stats-divider {
+  width: 2rpx;
+  height: 56rpx;
+  background: #d4e8d8;
+}
+
 /* 排行榜 */
 .ranking-section {
   margin: 0 32rpx 32rpx;

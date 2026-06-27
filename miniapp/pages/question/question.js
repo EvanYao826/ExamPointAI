@@ -67,7 +67,10 @@ Page({
           return
         }
         that.setData({ questions: res, loading: false })
-        that.showQuestion(0)
+        // 恢复上次答题位置
+        var savedIdx = wx.getStorageSync('question_idx_' + that.data.bankId) || 0
+        if (savedIdx >= res.length) savedIdx = 0
+        that.showQuestion(savedIdx)
       })
       .catch(function () {
         that.setData({ loading: false })
@@ -108,6 +111,9 @@ Page({
       multiCount: 0,
       optionStates: optionStates,
     })
+
+    // 记住答题位置
+    wx.setStorageSync('question_idx_' + this.data.bankId, idx)
   },
 
   // 预处理选项状态
