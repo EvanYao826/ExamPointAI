@@ -1,4 +1,6 @@
 var request = require('../../utils/request').request
+var requireLogin = require('../../utils/auth').requireLogin
+var isLoggedIn = require('../../utils/auth').isLoggedIn
 
 Page({
   data: {
@@ -6,14 +8,26 @@ Page({
     stats: {},
   },
 
-  onShow() {
-    // 设置 tabBar 选中态
+  onShow: function () {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 })
     }
-    this.loadUserInfo()
+    if (isLoggedIn()) {
+      this.loadUserInfo()
+    } else {
+      this.setData({ userInfo: {}, stats: {} })
+    }
   },
 
+  // 点击未登录区域触发登录
+  onLoginTap: function () {
+    var that = this
+    requireLogin().then(function () {
+      that.loadUserInfo()
+    }).catch(function () {})
+  },
+
+  // 加载用户信息
   loadUserInfo: function () {
     var that = this
     request('/api/v1/user/profile')
@@ -21,15 +35,14 @@ Page({
         var phone = res.phone || ''
         that.setData({
           userInfo: {
-            nickname: res.nickname || '未登录',
+            id: res.id,
+            nickname: res.nickname || '微信用户',
             avatar: res.avatar || '',
             phone: phone.length === 11 ? phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '',
           },
         })
       })
-      .catch(function () {
-        that.setData({ userInfo: { nickname: '未登录', phone: '' } })
-      })
+      .catch(function () {})
   },
 
   goToMyBanks: function () {
@@ -42,5 +55,9 @@ Page({
 
   goToSchool: function () {
     wx.showToast({ title: '开发中', icon: 'none' })
+  },
+
+  goToSettings: function () {
+    wx.navigateTo({ url: '/pages/settings/settings' })
   },
 })

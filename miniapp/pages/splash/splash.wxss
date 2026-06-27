@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: linear-gradient(160deg, #e8f8ee 0%, #eaf2fb 50%, #f0f7f2 100%);
 }
 
 .logo-wrap {
@@ -17,14 +17,14 @@
   justify-content: center;
 }
 
-/* 绿色加载圈 */
 .loading-ring {
   position: absolute;
   width: 200rpx;
   height: 200rpx;
   border-radius: 50%;
-  border: 6rpx solid #e8e8e8;
+  border: 6rpx solid #d4e8d8;
   border-top-color: #07c160;
+  border-right-color: #4A90D9;
   animation: spin 1s linear infinite;
 }
 
@@ -39,9 +39,9 @@
 }
 
 .app-name {
-  font-size: 40rpx;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #1a2e1a;
   margin-top: 40rpx;
-  letter-spacing: 8rpx;
+  letter-spacing: 12rpx;
 }

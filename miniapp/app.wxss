@@ -1,16 +1,19 @@
-/* 全局样式 - Design Token */
+/* 全局 Design Token - 清新绿蓝配色 */
 page {
-  --color-primary: #4A90D9;
-  --color-primary-dark: #357ABD;
+  --color-primary: #07c160;
+  --color-primary-light: #e8f8ee;
+  --color-primary-dark: #059a4a;
+  --color-accent: #4A90D9;
+  --color-accent-light: #eaf2fb;
   --color-success: #07c160;
   --color-error: #fa5151;
   --color-warning: #ff9900;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #666;
-  --color-text-placeholder: #c0c0c0;
-  --color-bg: #f7f8fa;
+  --color-text: #1a2e1a;
+  --color-text-secondary: #5a7a5a;
+  --color-text-hint: #9ab89a;
+  --color-bg: #e4f0e8;
   --color-bg-white: #fff;
-  --color-border: #e8e8e8;
+  --color-border: #d4e8d8;
 
   font-family: -apple-system, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;

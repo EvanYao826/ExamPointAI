@@ -7,7 +7,8 @@
   height: 110rpx;
   background: #fff;
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -4rpx 20rpx rgba(7, 193, 96, 0.1);
+  border-top: 2rpx solid #e8f8ee;
 }
 
 .tabbar-item {
@@ -26,10 +27,10 @@
 
 .tabbar-text {
   font-size: 24rpx;
-  color: #999;
+  color: #9ab89a;
 }
 
 .tabbar-item.active .tabbar-text {
-  color: #4A90D9;
+  color: #07c160;
   font-weight: 600;
 }

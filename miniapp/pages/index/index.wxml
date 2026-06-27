@@ -1,25 +1,53 @@
 <view class="index-page">
   <!-- 顶部：科目选择 -->
-  <view class="header">
-    <text class="current-subject">当前科目：{{currentSubject || '请选择'}} ▼</text>
+  <view class="header" bindtap="toggleSubjectPicker">
+    <text class="current-subject">当前科目：{{currentSubject.name || '请选择'}} {{showPicker ? '▲' : '▼'}}</text>
+  </view>
+
+  <!-- 科目下拉列表 -->
+  <view class="subject-picker" wx:if="{{showPicker}}">
+    <view class="picker-mask" bindtap="closePicker"></view>
+    <view class="picker-list">
+      <view
+        class="picker-item {{item.id === currentSubject.id ? 'active' : ''}}"
+        wx:for="{{subjects}}"
+        wx:key="id"
+        bindtap="selectSubject"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+      >
+        <text>{{item.name}}</text>
+        <text wx:if="{{item.id === currentSubject.id}}" class="check">✓</text>
+      </view>
+    </view>
   </view>
 
   <!-- 功能入口 -->
   <view class="entry-grid">
-    <view class="entry-item" bindtap="goToPublicBank">
-      <text class="entry-icon">📚</text>
+    <view class="entry-item entry-large" hover-class="entry-hover" bindtap="goToPublicBank">
+      <view class="entry-icon-wrap entry-icon-green">
+        <text class="entry-icon">📚</text>
+      </view>
       <text class="entry-label">公共题库</text>
+      <text class="entry-desc">海量题库等你刷</text>
     </view>
-    <view class="entry-item" bindtap="goToMyBank">
-      <text class="entry-icon">📖</text>
+    <view class="entry-item entry-large" hover-class="entry-hover" bindtap="goToMyBank">
+      <view class="entry-icon-wrap entry-icon-blue">
+        <text class="entry-icon">📖</text>
+      </view>
       <text class="entry-label">我的题库</text>
+      <text class="entry-desc">个性化题库管理</text>
     </view>
-    <view class="entry-item" bindtap="goToWrong">
-      <text class="entry-icon">❌</text>
+    <view class="entry-item entry-small" hover-class="entry-hover" bindtap="goToWrong">
+      <view class="entry-icon-wrap-sm entry-icon-teal">
+        <text class="entry-icon-sm">📝</text>
+      </view>
       <text class="entry-label">错题本</text>
     </view>
-    <view class="entry-item" bindtap="goToUpload">
-      <text class="entry-icon">➕</text>
+    <view class="entry-item entry-small" hover-class="entry-hover" bindtap="goToUpload">
+      <view class="entry-icon-wrap-sm entry-icon-purple">
+        <text class="entry-icon-sm">📤</text>
+      </view>
       <text class="entry-label">添加题库</text>
     </view>
   </view>
@@ -43,7 +71,6 @@
 
       <view wx:if="{{rankingList.length > 0}}" class="ranking-divider"></view>
 
-      <!-- 我的排名 -->
       <view class="ranking-item my-rank" wx:if="{{myCount > 0}}">
         <text class="rank-badge">📍</text>
         <text class="rank-name">我</text>
@@ -52,6 +79,5 @@
     </view>
   </view>
 
-  <!-- 底部 TabBar 占位 -->
   <view class="tabbar-placeholder"></view>
 </view>

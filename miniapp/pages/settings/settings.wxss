@@ -1,0 +1,45 @@
+.settings-page {
+  min-height: 100vh;
+  padding: 32rpx;
+  background: #e4f0e8;
+}
+
+.menu-group {
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  margin-bottom: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(7, 193, 96, 0.08);
+  border: 2rpx solid #e8f8ee;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 32rpx;
+  border-bottom: 2rpx solid #f0f7f2;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-text {
+  font-size: 30rpx;
+  color: #1a2e1a;
+}
+
+.menu-arrow {
+  font-size: 36rpx;
+  color: #d4e8d8;
+}
+
+.logout {
+  justify-content: center;
+}
+
+.logout-text {
+  color: #fa5151;
+  text-align: center;
+}
