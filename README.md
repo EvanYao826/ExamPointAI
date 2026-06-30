@@ -35,7 +35,18 @@ open http://localhost:8000/docs
 ## 开发进度
 
 - [x] 项目框架搭建
-- [ ] 后端核心接口
-- [ ] 小程序页面开发
-- [ ] 文档解析功能
+- [x] 后端核心接口
+- [x] 小程序页面开发
+- [x] 文档解析功能
+- [x] 排行榜与学习统计
 - [ ] 管理后台
+
+## 验收测试
+
+```bash
+# 第八周：用户级排行榜 + 学习统计
+python -m pytest backend/tests/test_week8.py -q
+
+# 已启动本地后端后，可额外执行接口联调
+$env:RUN_LIVE_API_TESTS="1"; python -m pytest backend/tests/test_m2_api.py -q
+```

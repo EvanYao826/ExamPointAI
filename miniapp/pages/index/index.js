@@ -89,9 +89,7 @@ Page({
   // 加载学习统计
   loadStatistics: function () {
     var that = this
-    var subjectId = that.data.currentSubject.id
-    if (!subjectId) return
-    request('/api/v1/statistics/overview?subject_id=' + subjectId)
+    request('/api/v1/statistics/overview')
       .then(function (res) {
         that.setData({
           totalCount: res.total_count || 0,
@@ -105,16 +103,14 @@ Page({
   // 加载排行榜
   loadRanking: function () {
     var that = this
-    var subjectId = that.data.currentSubject.id
-    if (!subjectId) return
     var tab = that.data.rankingTab
-    var url = '/api/v1/ranking/' + tab + '?subject_id=' + subjectId
+    var url = '/api/v1/ranking/' + tab
     request(url)
       .then(function (res) {
         that.setData({
           rankingList: res.list || [],
           myRank: res.my_rank || 0,
-          myCount: res.my_score || 0,
+          myCount: res.my_total_count || 0,
         })
       })
       .catch(function () {})

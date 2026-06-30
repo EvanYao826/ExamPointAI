@@ -1,4 +1,7 @@
 """M2 全部接口测试（16个）"""
+import os
+
+import pytest
 import requests
 
 BASE = "http://localhost:8000/api/v1"
@@ -13,6 +16,9 @@ def login():
 
 
 def test_all():
+    if os.getenv("RUN_LIVE_API_TESTS") != "1":
+        pytest.skip("设置 RUN_LIVE_API_TESTS=1 后，对已启动的 localhost:8000 执行接口联调")
+
     headers = login()
     print("登录成功\n")
 

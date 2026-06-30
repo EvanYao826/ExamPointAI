@@ -1,57 +1,90 @@
-"""第八周接口测试：排行榜 + 统计"""
-import requests
+"""第八周验收测试：用户级统计 + 排行榜。"""
 
-BASE = "http://localhost:8000/api/v1"
+import sys
+from pathlib import Path
 
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
-def login():
-    """登录并返回 headers"""
-    requests.post(f"{BASE}/auth/sms/send", json={"phone": "13800000000"})
-    r = requests.post(f"{BASE}/auth/sms/login", json={"phone": "13800000000", "code": "888888"})
-    token = r.json()["access_token"]
-    return {"Authorization": f"Bearer {token}"}
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
-
-def test_all():
-    headers = login()
-    print("登录成功\n")
-
-    # 先获取下一题，确认 bank_id 和可用题目
-    r = requests.get(f"{BASE}/question/next", headers=headers, params={"bank_id": 1})
-    if r.status_code == 200:
-        q = r.json()
-        print(f"下一题: id={q['id']}, bank_id={q['bank_id']}")
-    else:
-        print(f"获取下一题失败: {r.status_code} {r.text}")
-        return
-
-    # 答这道题
-    print("\n--- 答题产生数据 ---")
-    r = requests.post(f"{BASE}/question/submit", headers=headers, json={
-        "question_id": q["id"],
-        "user_answer": "A",
-        "cost_time": 10,
-    })
-    print(f"[{'PASS' if r.status_code == 200 else 'FAIL'}] submit -> {r.status_code}")
-    if r.status_code == 200:
-        print(f"       {r.json()}")
-
-    # 用正确的 subject_id=5 查询
-    print("\n--- 排行榜 (subject_id=5) ---")
-    for name, path in [("GET /ranking/daily", "/ranking/daily"), ("GET /ranking/weekly", "/ranking/weekly")]:
-        r = requests.get(f"{BASE}{path}", headers=headers, params={"subject_id": 5})
-        print(f"[{'PASS' if r.status_code == 200 else 'FAIL'}] {name} -> {r.status_code}")
-        if r.status_code == 200:
-            print(f"       {r.json()}")
-
-    print("\n--- 学习统计 (subject_id=5) ---")
-    r = requests.get(f"{BASE}/statistics/overview", headers=headers, params={"subject_id": 5})
-    print(f"[{'PASS' if r.status_code == 200 else 'FAIL'}] GET /statistics/overview -> {r.status_code}")
-    if r.status_code == 200:
-        print(f"       {r.json()}")
-
-    print("\n第八周接口测试完成")
+from app.api.v1.question import _update_user_stats
+from app.api.v1.ranking import _build_ranking
+from app.api.v1.statistics import statistics_overview
+from app.core.database import Base
+from app.models.ranking import UserStatistics
+from app.models.user import User
 
 
-if __name__ == "__main__":
-    test_all()
+@pytest.fixture()
+def db():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(bind=engine)
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    session = TestingSessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()
+        Base.metadata.drop_all(bind=engine)
+
+
+def test_answer_statistics_updates_by_submit_count(db):
+    _update_user_stats(db, user_id=1, delta_count=1, delta_correct=0)
+
+    stats = db.query(UserStatistics).filter(UserStatistics.user_id == 1).first()
+    assert stats.total_count == 1
+    assert stats.total_correct == 0
+    assert stats.continue_days == 1
+
+    _update_user_stats(db, user_id=1, delta_count=1, delta_correct=1)
+
+    db.refresh(stats)
+    assert stats.total_count == 2
+    assert stats.total_correct == 1
+
+
+def test_ranking_orders_by_total_count_and_returns_current_user(db):
+    db.add_all([
+        User(id=1, nickname="第一名", avatar=""),
+        User(id=2, nickname="当前用户", avatar=""),
+        User(id=3, nickname="零刷题", avatar=""),
+        UserStatistics(user_id=1, total_count=8, total_correct=6),
+        UserStatistics(user_id=2, total_count=3, total_correct=2),
+        UserStatistics(user_id=3, total_count=0, total_correct=0),
+    ])
+    db.commit()
+
+    response = _build_ranking(db, current_user_id=2, limit=10)
+
+    assert [item.user_id for item in response.list] == [1, 2]
+    assert response.my_rank == 2
+    assert response.my_total_count == 3
+    assert response.my_accuracy == pytest.approx(0.6667)
+
+
+def test_statistics_overview_returns_user_level_data(db):
+    user = User(id=1, nickname="当前用户")
+    db.add(user)
+    db.add(UserStatistics(
+        user_id=1,
+        total_count=5,
+        total_correct=4,
+        continue_days=2,
+    ))
+    db.commit()
+
+    response = statistics_overview(db=db, user=user)
+
+    assert response.total_count == 5
+    assert response.total_correct == 4
+    assert response.total_accuracy == 0.8
+    assert response.continue_days == 2

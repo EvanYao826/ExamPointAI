@@ -49,9 +49,7 @@ Page({
   // 加载学习统计
   loadStatistics: function () {
     var that = this
-    var subjectId = wx.getStorageSync('currentSubjectId')
-    if (!subjectId) return
-    request('/api/v1/statistics/overview?subject_id=' + subjectId)
+    request('/api/v1/statistics/overview')
       .then(function (res) {
         that.setData({
           stats: {

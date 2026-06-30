@@ -92,14 +92,14 @@ def submit_answer(
         )
         db.add(record)
 
-    # 记录是否为新答题（用于统计更新）
-    is_new_record = record.id is None
+    _update_user_stats(
+        db,
+        user.id,
+        delta_count=1,
+        delta_correct=1 if is_correct else 0,
+    )
 
     db.commit()
-
-    # --- 统计更新 ---
-    if is_new_record:
-        _update_user_stats(db, user.id, is_correct)
 
     return SubmitResponse(
         is_correct=is_correct,
@@ -136,8 +136,13 @@ def get_analysis(
     )
 
 
-def _update_user_stats(db: Session, user_id: int, is_correct: bool) -> None:
-    """答题后更新用户统计（用户级，不按科目区分）"""
+def _update_user_stats(
+    db: Session,
+    user_id: int,
+    delta_count: int,
+    delta_correct: int,
+) -> None:
+    """答题后更新用户统计（用户级，不按科目区分，按提交次数统计）"""
     today = date.today()
     stats = db.query(UserStatistics).filter(UserStatistics.user_id == user_id).first()
 
@@ -160,9 +165,7 @@ def _update_user_stats(db: Session, user_id: int, is_correct: bool) -> None:
     elif stats.last_study_date is None:
         stats.continue_days = 1
 
-    stats.total_count += 1
-    if is_correct:
-        stats.total_correct += 1
+    stats.total_count = max(0, stats.total_count + delta_count)
+    stats.total_correct = max(0, stats.total_correct + delta_correct)
     stats.last_study_date = today
-
-    db.commit()
+    db.flush()
